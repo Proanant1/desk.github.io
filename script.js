@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- PORTFOLIO DATA (The Core Content) ---
+    // Note: Links are now stored separately within the object for easier formatting.
     const PORTFOLIO_DATA = {
         'about': {
             title: 'CYBER COMMAND CENTER // ABOUT ME',
@@ -15,8 +16,13 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
 // CONTACT PROTOCOLS
 > EMAIL: anantpandey620@gmail.com
 > GITHUB: https://github.com/Proanant1
+
 > END OF FILE.
-`
+`,
+            links: {
+                'GitHub Profile': 'https://github.com/Proanant1',
+                'Email (anantpandey620@gmail.com)': 'mailto:anantpandey620@gmail.com'
+            }
         },
         'projects': {
             title: 'THREAT ANALYSIS LAB // ACTIVE PROJECTS',
@@ -24,7 +30,6 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
 // PROJECT 001: InfiniteTraceX
 > CLASSIFICATION: Advanced Phishing URL Detector
 > DESCRIPTION: A tool developed to identify and flag malicious phishing URLs using pattern analysis and machine learning concepts.
-> ACCESS LINK: https://infinitetracex.netlify.app/
 
 // PROJECT 002: Blockchain Node Infrastructure
 > CLASSIFICATION: Infrastructure Security & Deployment
@@ -33,8 +38,10 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
 // PROJECT 003: Security-focused Node Operations
 > CLASSIFICATION: Operational Security
 > DESCRIPTION: Implementing rigorous firewall rules, access control, secure key management (HSMs/encrypted storage), and continuous monitoring to ensure node integrity and prevent unauthorized access.
-> END OF FILE.
-`
+`,
+            links: {
+                'InfiniteTraceX Demo': 'https://infinitetracex.netlify.app/'
+            }
         },
         'skills': {
             title: 'SKILLS FIREWALL // DEFENSE PROTOCOLS',
@@ -49,7 +56,8 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
 > Blockchain Infrastructure Security (Key management, attack vectors)
 > Docker & Cloud Security Awareness (Basic container hardening, IAM concepts)
 > END OF FILE.
-`
+`,
+            links: {}
         },
         'certs': {
             title: 'CERTIFICATION VAULT // ACHIEVEMENTS',
@@ -62,9 +70,10 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
 
 // VIEW FULL ARCHIVE:
 > ACCESSING DRIVE LINK...
-> https://drive.google.com/drive/folders/1hfliYwD9h-J8NXAxCcJA9Jt-Vu6Y8BM3
-> END OF FILE.
-`
+`,
+            links: {
+                'Certificate Drive Folder': 'https://drive.google.com/drive/folders/1hfliYwD9h-J8NXAxCcJA9Jt-Vu6Y8BM3'
+            }
         },
         'experience': {
             title: 'EXPERIENCE SERVER ROOM // DEPLOYMENT LOGS',
@@ -79,7 +88,8 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
 // LOG 003: Secure Deployment Practices (Cloud/VPS)
 > METHODOLOGIES: Using secure shell access (SSH keys only), principle of least privilege (PoLP), and infrastructure as code (IaC) for consistent, secure deployments.
 > END OF FILE.
-`
+`,
+            links: {}
         },
         'education': {
             title: 'EDUCATION DATABASE // ACADEMIC PROFILE',
@@ -92,7 +102,8 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
 // CAREER LOG
 > Transition to Cybersecurity: Driven by self-study, practical projects, and a focus on securing digital and decentralized systems.
 > END OF FILE.
-`
+`,
+            links: {}
         },
         'resume': {
             title: 'RESUME TERMINAL // DOWNLOAD INITIATED',
@@ -100,12 +111,10 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
 // INITIATING SECURE TRANSFER...
 // FILE: ANANT_PANDEY_CYBERSEC_RESUME.PDF
 > Please click the link below to view the official Cybersecurity Resume.
-> DIRECT DOWNLOAD LINK:
-> https://drive.google.com/file/d/1nIzg5jFt1ri5Nsv--qqui41NUwnGuyHQ/view?usp=drive_link
-
-> STATUS: TRANSFER COMPLETE.
-> END OF FILE.
-`
+`,
+            links: {
+                'View Cybersecurity Resume': 'https://drive.google.com/file/d/1nIzg5jFt1ri5Nsv--qqui41NUwnGuyHQ/view?usp=drive_link'
+            }
         }
     };
 
@@ -120,9 +129,28 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
     const terminalOutput = document.getElementById('terminal-output');
     const nodeName = document.getElementById('node-name');
     const audioToggle = document.getElementById('audio-toggle');
-    const audio = new Audio('cyber-click.mp3'); // You must provide this sound file
+    const audio = new Audio('cyber-click.mp3'); 
 
     let audioEnabled = true;
+
+    /**
+     * Helper function to format terminal output, adding clickable links.
+     * @param {string} content The main text content.
+     * @param {object} links An object of {displayText: url} pairs.
+     * @returns {string} HTML string with styled, clickable links.
+     */
+    function formatTerminalOutput(content, links) {
+        let outputHTML = content.replace(/\n/g, '<br>'); // Preserve line breaks
+
+        if (Object.keys(links).length > 0) {
+            outputHTML += '<br><br>// ACCESS LINKS:<br>';
+            for (const [text, url] of Object.entries(links)) {
+                // Use a special neon link class
+                outputHTML += `> <a href="${url}" target="_blank" class="terminal-link">${text}</a><br>`;
+            }
+        }
+        return outputHTML;
+    }
 
     // --- 1. LOGIN SIMULATION (Typing Effect) ---
     const loginSequence = [
@@ -174,19 +202,11 @@ I transitioned from Mechatronics Engineering into Cybersecurity, driven by a dee
     function openTerminal(sectionKey) {
         const data = PORTFOLIO_DATA[sectionKey];
 
-        if (sectionKey === 'resume') {
-            // Direct link for the resume, open in a new tab
-            window.open(data.content.split('https://drive.google.com')[1].trim(), '_blank');
-            // Display a quick confirmation in the modal
-            nodeName.textContent = data.title;
-            terminalOutput.textContent = data.content;
-            terminalModal.style.display = 'block';
-            return;
-        }
+        // Format the content using the new helper function
+        const formattedOutput = formatTerminalOutput(data.content, data.links);
 
-        // Standard Modal content
         nodeName.textContent = data.title;
-        terminalOutput.textContent = data.content;
+        terminalOutput.innerHTML = formattedOutput; // Use innerHTML to render the <a> tags
         terminalModal.style.display = 'block';
     }
 
