@@ -1,48 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Secure Zone – Anant Pandey</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-</head>
 <body>
-
-<div class="matrix-bg"></div>
 
 <div class="login-overlay" id="loginOverlay">
   <div class="login-panel">
     <h2>ACCESS GATEWAY</h2>
-    <p>Entering Secure Zone: <span>Anant Pandey</span></p>
-    <input id="loginInput" placeholder="ACCESS_KEY=ANANT_SECURE"/>
+    <p>Entering Secure Zone: Anant Pandey</p>
+    <input id="loginInput" value="ANANT_SECURE"/>
     <button id="loginBtn">INITIATE SESSION</button>
   </div>
 </div>
 
-<header>
-  <h1>🛡 SECURE ZONE : ANANT PANDEY</h1>
-  <p>Cybersecurity Portfolio Environment</p>
-</header>
-
-<div class="container">
+<div class="main-wrapper">
 
   <div class="city" id="city">
-    <div class="grid"></div>
-
-    <div class="building" data-zone="command" style="left:10%;top:15%;">CYBER COMMAND</div>
-    <div class="building" data-zone="threats" style="left:60%;top:10%;">THREAT LAB</div>
+    <div class="building" data-zone="command" style="left:10%;top:10%;">CYBER COMMAND</div>
+    <div class="building" data-zone="threats" style="left:60%;top:15%;">THREAT LAB</div>
     <div class="building" data-zone="skills" style="left:15%;top:50%;">SKILLS FIREWALL</div>
     <div class="building" data-zone="certs" style="left:60%;top:50%;">CERT VAULT</div>
-    <div class="building" data-zone="experience" style="left:10%;top:75%;">SERVER ROOM</div>
+    <div class="building" data-zone="experience" style="left:10%;top:80%;">SERVER ROOM</div>
     <div class="building" data-zone="resume" style="left:45%;top:70%;">RESUME TERMINAL</div>
 
-    <div class="agent" id="agent"></div>
+    <div id="agent" class="agent"></div>
   </div>
 
-  <div class="terminal" id="terminal"></div>
+  <div class="terminal" id="terminal">
+    <h2>WELCOME TO SECURE ZONE</h2>
+    <p>Move using W A S D and click a building to access data.</p>
+  </div>
 
 </div>
 
 <script src="script.js"></script>
 </body>
-</html>
