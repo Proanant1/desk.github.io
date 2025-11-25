@@ -256,3 +256,28 @@ body, html {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
 }
+
+/* TERMINAL LINK STYLES */
+.terminal-link {
+    color: #00ff41; /* Neon Green */
+    text-decoration: none; /* Remove underline */
+    border-bottom: 1px dashed rgba(0, 255, 65, 0.5); /* Subtle terminal underline */
+    cursor: pointer;
+    transition: color 0.2s, border-bottom 0.2s;
+    font-weight: bold;
+}
+
+.terminal-link:hover {
+    color: #33ff33; /* Slightly brighter on hover */
+    border-bottom: 1px solid #00ff41;
+}
+
+/* Ensure terminal output uses innerHTML safely for links */
+#terminal-output {
+    white-space: pre-wrap;
+    font-size: 14px;
+    line-height: 1.5;
+    /* This ensures links wrap correctly */
+    word-wrap: break-word; 
+}
+
