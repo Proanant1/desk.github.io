@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secure Zone – Anant Pandey | Cybersecurity Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #02040a;
+      --panel: #050915;
+      --accent: #18ff6d;
+      --accent-soft: rgba(24, 255, 109, 0.3);
+      --text-main: #e5ffe9;
+      --text-muted: #8af2b7;
+      --error: #ff4b81;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Consolas", "Fira Code", monospace;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #061622 0, #010308 70%);
+      color: var(--text-main);
+      overflow: hidden;
+    }
+
+    /* MATRIX RAIN BACKGROUND */
+    .matrix-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.25;
+      z-index: 0;
+      background-image: linear-gradient(
+        rgba(24, 255, 109, 0.2) 1px,
+        transparent 1px
+      );
+      background-size: 3px 18px;
+      animation: rain 0.8s linear infinite;
+    }
+
+    @keyframes rain {
+      from {
+        transform: translateY(-18px);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      height: 100vh;
+      gap: 1px;
+      background: linear-gradient(90deg, #0b161f, #03060c);
+    }
+
+    header {
+      grid-column: 1 / -1;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--accent-soft);
+      background: linear-gradient(90deg, #020409, #050913);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .brand-chip {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 0 12px var(--accent-soft);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-text span:first-child {
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .brand-text span:last-child {
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .tagline {
+      font-size: 12px;
+      text-align: right;
+      color: var(--text-muted);
+    }
+
+    .tagline strong {
+      color: var(--accent);
+    }
+
+    .main {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      height: calc(100vh - 52px);
+    }
+
+    /* CITY / GAME VIEW */
+    .city-wrapper {
+      position: relative;
+      padding: 16px;
+      background: radial-gradient(circle at top, #050b16, #020308 70%);
+      border-right: 1px solid var(--accent-soft);
+      overflow: hidden;
+    }
+
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
+
+    .hud span strong {
+      color: var(--accent);
+    }
+
+    .city {
+      position: relative;
+      margin-top: 6px;
+      width: 100%;
+      height: calc(100% - 26px);
+      border-radius: 18px;
+      border: 1px solid var(--accent-soft);
+      background: radial-gradient(circle at top, #050b15, #010208 70%);
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(
+          to right,
+          rgba(24, 255, 109, 0.1) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(24, 255, 109, 0.05) 1px,
+          transparent 1px
+        );
+      background-size: 32px 32px;
+      opacity: 0.6;
+    }
+
+    .building {
+      position: absolute;
+      border-radius: 10px;
+      border: 1px solid var(--accent-soft);
+      background: linear-gradient(160deg, #050c18, #03040a);
+      box-shadow: 0 0 18px rgba(24, 255, 109, 0.18);
+      padding: 6px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out,
+        border-color 0.12s ease-out;
+    }
+
+    .building:hover,
+    .building.active {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: 0 0 22px rgba(24, 255, 109, 0.45);
+      color: var(--accent);
+    }
+
+    .building::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      border: 1px solid transparent;
+      background: conic-gradient(
+        from 180deg,
+        transparent,
+        rgba(24, 255, 109, 0.9),
+        transparent
+      );
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: -1;
+    }
+
+    .building:hover::before,
+    .building.active::before {
+      opacity: 0.45;
+      filter: blur(3px);
+    }
+
+    .agent {
+      position: absolute;
+      width: 20px;
+      height: 28px;
+      border-radius: 8px;
+      background: radial-gradient(circle at top, #1cff86, #0a2c18);
+      border: 1px solid #96ffd3;
+      box-shadow: 0 0 18px rgba(24, 255, 109, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .agent::after {
+      content: "</>";
+      font-size: 8px;
+      color: #001108;
+      font-weight: bold;
+    }
+
+    .hint-bar {
+      position: absolute;
+      bottom: 6px;
+      left: 8px;
+      right: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      background: rgba(0, 0, 0, 0.7);
+      font-size: 10px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .key {
+      border-radius: 4px;
+      border: 1px solid var(--accent-soft);
+      padding: 2px 5px;
+      margin-right: 4px;
+      font-size: 9px;
+      color: var(--accent);
+    }
+
+    /* INFO PANEL / TERMINAL */
+    .panel {
+      padding: 16px 16px 10px;
+      background: radial-gradient(circle at top, #050913, #010108 70%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .id-card {
+      border-radius: 16px;
+      border: 1px solid var(--accent-soft);
+      padding: 12px;
+      background: linear-gradient(130deg, #050b15, #020309);
+      box-shadow: 0 0 26px rgba(0, 0, 0, 0.8);
+    }
+
+    .id-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .id-name {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .id-title {
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .id-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+
+    .id-meta a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .badge {
+      font-size: 9px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      padding: 2px 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      padding: 6px 12px;
+      font-size: 11px;
+      background: radial-gradient(circle at top, #052812, #020607);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 0 14px rgba(24, 255, 109, 0.4);
+      transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+    }
+
+    .btn span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(24, 255, 109, 0.9);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(24, 255, 109, 0.8);
+      background: radial-gradient(circle at top, #0b3f1d, #020607);
+    }
+
+    .terminal {
+      flex: 1;
+      border-radius: 16px;
+      border: 1px solid var(--accent-soft);
+      padding: 10px;
+      background: #020308;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+    }
+
+    .terminal-body {
+      border-radius: 10px;
+      border: 1px solid rgba(24, 255, 109, 0.25);
+      padding: 8px;
+      background: radial-gradient(circle at top left, #020c08, #000104 70%);
+      font-size: 12px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .terminal-body h2 {
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .terminal-body h3 {
+      font-size: 12px;
+      margin-top: 8px;
+      margin-bottom: 3px;
+      color: var(--text-main);
+    }
+
+    .terminal-body p {
+      margin-bottom: 4px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .terminal-body ul {
+      margin-left: 14px;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+    }
+
+    .terminal-body li {
+      margin-bottom: 2px;
+    }
+
+    .terminal-body a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .terminal-body a:hover {
+      text-decoration: underline;
+    }
+
+    .scan-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(24, 255, 109, 0.7),
+        transparent
+      );
+      animation: scan 2.2s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      from {
+        top: 0;
+      }
+      to {
+        top: 100%;
+      }
+    }
+
+    .prompt {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .prompt span {
+      color: var(--accent);
+    }
+
+    /* LOGIN OVERLAY */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #020814, #000);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .login-panel {
+      width: min(380px, 90vw);
+      border-radius: 18px;
+      border: 1px solid var(--accent);
+      background: #020308;
+      padding: 16px 18px 14px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .login-title {
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .login-main {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .login-main span {
+      color: var(--accent);
+    }
+
+    .login-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .login-input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      padding: 7px 10px;
+      background: #010106;
+      color: var(--accent);
+      font-size: 12px;
+      margin-bottom: 8px;
+      outline: none;
+    }
+
+    .login-input::placeholder {
+      color: rgba(138, 242, 183, 0.4);
+    }
+
+    .login-btn {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: radial-gradient(circle at top, #065022, #020608);
+      color: var(--accent);
+      padding: 7px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(24, 255, 109, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .login-foot {
+      margin-top: 6px;
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .app,
+      .main {
+        grid-template-columns: 1fr;
+      }
+      .city-wrapper {
+        height: 48vh;
+      }
+      .panel {
+        height: 52vh;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .tagline {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="matrix-bg"></div>
+
+  <!-- LOGIN OVERLAY -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-panel">
+      <div class="login-title">ACCESS GATEWAY</div>
+      <div class="login-main">
+        Entering Secure Zone: <span>Anant&nbsp;Pandey</span>
+      </div>
+      <div class="login-note">
+        This interface simulates a cybersecurity operations environment.  
+        Provide any <span style="color: var(--accent);">access key</span> and
+        proceed to explore the portfolio city.
+      </div>
+      <input
+        id="loginInput"
+        class="login-input"
+        placeholder="ACCESS_KEY=ANANT_SECURE"
+      />
+      <button class="login-btn" id="loginBtn">
+        INITIATE SECURE SESSION
+      </button>
+      <div class="login-foot">Simulated environment • No real credentials used</div>
+    </div>
+  </div>
+
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="brand-chip">A</div>
+        <div class="brand-text">
+          <span>SECURE ZONE ONLINE</span>
+          <span>Cybersecurity Portfolio Environment</span>
+        </div>
+      </div>
+      <div class="tagline">
+        <div>"<strong>Entering Secure Zone: Anant Pandey – Cybersecurity Portfolio</strong>"</div>
+        <div>Use <strong>WASD / Arrow</strong> to move • <strong>E</strong> or click to enter zones</div>
+      </div>
+    </header>
+
+    <div class="main">
+      <!-- CITY VIEW -->
+      <section class="city-wrapper">
+        <div class="hud">
+          <span>AGENT: <strong>CYBER-AGENT-AP</strong></span>
+          <span>STATUS: <strong>CONNECTED</strong></span>
+          <span>MODE: <strong>READ-ONLY PORTFOLIO</strong></span>
+        </div>
+        <div class="city" id="city">
+          <div class="grid"></div>
+
+          <!-- Buildings -->
+          <div
+            class="building"
+            data-zone="command"
+            style="left: 10%; top: 16%; width: 26%; height: 18%;"
+          >
+            CYBER COMMAND CENTER
+          </div>
+
+          <div
+            class="building"
+            data-zone="threats"
+            style="left: 50%; top: 10%; width: 32%; height: 20%;"
+          >
+            THREAT ANALYSIS LAB
+          </div>
+
+          <div
+            class="building"
+            data-zone="skills"
+            style="left: 12%; top: 46%; width: 32%; height: 18%;"
+          >
+            SKILLS FIREWALL
+          </div>
+
+          <div
+            class="building"
+            data-zone="certs"
+            style="left: 58%; top: 42%; width: 24%; height: 16%;"
+          >
+            CERTIFICATION VAULT
+          </div>
+
+          <div
+            class="building"
+            data-zone="experience"
+            style="left: 16%; top: 74%; width: 26%; height: 16%;"
+          >
+            EXPERIENCE SERVER ROOM
+          </div>
+
+          <div
+            class="building"
+            data-zone="education"
+            style="left: 54%; top: 70%; width: 28%; height: 16%;"
+          >
+            EDUCATION DATABASE
+          </div>
+
+          <div
+            class="building"
+            data-zone="resume"
+            style="left: 40%; top: 52%; width: 18%; height: 12%;"
+          >
+            RESUME TERMINAL
+          </div>
+
+          <!-- Agent -->
+          <div class="agent" id="agent"></div>
+
+          <!-- Hint Bar -->
+          <div class="hint-bar">
+            <div>
+              <span class="key">W</span><span class="key">A</span
+              ><span class="key">S</span><span class="key">D</span> or
+              <span class="key">←</span><span class="key">↑</span
+              ><span class="key">↓</span><span class="key">→</span> to move
+            </div>
+            <div>
+              <span class="key">E</span> or click building •
+              <span class="key">TAB</span> cycle zones
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TERMINAL / INFO PANEL -->
+      <section class="panel">
+        <div class="id-card">
+          <div class="id-top">
+            <div>
+              <div class="id-name">ANANT PANDEY</div>
+              <div class="id-title">
+                Aspiring Cybersecurity Professional | Blockchain Infrastructure Specialist
+              </div>
+            </div>
+          </div>
+          <div class="id-meta">
+            <span>Mumbai, Maharashtra, India</span>
+            <span>📞 +91 8454913952</span>
+            <span>📧 <a href="mailto:anantpandey620@gmail.com">anantpandey620@gmail.com</a></span>
+            <span>🐙 GitHub: <a href="https://github.com/Proanant1" target="_blank">github.com/Proanant1</a></span>
+          </div>
+          <div class="badge-row">
+            <div class="badge">CYBERSECURITY FOCUS</div>
+            <div class="badge">BLOCKCHAIN INFRA</div>
+            <div class="badge">CLOUD & LINUX</div>
+            <div class="badge">MECHATRONICS BACKGROUND</div>
+          </div>
+          <div class="btn-row">
+            <a
+              href="https://drive.google.com/file/d/1nIzg5jFt1ri5Nsv--qqui41NUwnGuyHQ/view?usp=drive_link"
+              class="btn"
+              target="_blank"
+            >
+              <span class="dot"></span>
+              View Cybersecurity Resume
+            </a>
+            <a
+              href="https://infinitetracex.netlify.app/"
+              class="btn"
+              target="_blank"
+            >
+              <span class="dot"></span>
+              Launch InfiniteTraceX Demo
+            </a>
+          </div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-header">
+            <div>~/secure_zone/ops_terminal.sh</div>
+            <div class="terminal-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+          </div>
+          <div class="terminal-body" id="terminalBody">
+            <div class="scan-line"></div>
+            <!-- Content injected by JS -->
+          </div>
+          <div class="prompt">
+            <span>agent@secure-zone:~$</span> SELECT A BUILDING TO DECODE ITS DATA...
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // -------- TERMINAL CONTENT --------
+    const ZONES = {
+      command: {
+        title: "CYBER COMMAND CENTER // ABOUT",
+        html: `
+          <h3>Transition to Cybersecurity</h3>
+          <p>
+            I am a recent Mechanical & Mechatronics Engineering graduate who has
+            deliberately transitioned into cybersecurity, driven by a deep interest in
+            <strong>digital defense, network security, ethical hacking, and blockchain security</strong>.
+          </p>
+          <p>
+            My background in robotics, IoT, and blockchain node infrastructure gives me a
+            systems-level perspective on how hardware, software, and distributed networks
+            interact — including where they can fail or be exploited.
+          </p>
+          <p>
+            I am actively building skills and projects around phishing detection, secure
+            infrastructure deployment, and Linux/cloud security to prepare for a
+            <strong>Master’s in Cybersecurity</strong> and future work in security engineering.
+          </p>
+        `,
+      },
+      threats: {
+        title: "THREAT ANALYSIS LAB // PROJECTS",
+        html: `
+          <h3>InfiniteTraceX – Advanced Phishing URL Detector</h3>
+          <p>
+            <strong>InfiniteTraceX</strong> is a web-based tool focused on detecting
+            malicious and phishing URLs. It demonstrates my interest in practical
+            threat detection, safe browsing, and user-focused security tooling.
+          </p>
+          <ul>
+            <li>Analyses URLs and flags potential phishing patterns.</li>
+            <li>Showcases understanding of how attackers abuse links and domains.</li>
+            <li>Hosted demo: 
+              <a href="https://infinitetracex.netlify.app/" target="_blank">
+                https://infinitetracex.netlify.app/
+              </a>
+            </li>
+          </ul>
+
+          <h3>Blockchain Node Infrastructure</h3>
+          <p>
+            Operated full and validator nodes for networks such as
+            <strong>Aztec, Nillion, Boundless, Pipe, and Gensyn</strong>, using
+            Docker, systemd, and Nginx on AWS, GCP, and Hetzner VPS.
+          </p>
+          <ul>
+            <li>Designed, deployed, and maintained distributed infrastructure.</li>
+            <li>Participated in public testnets and provided protocol-level feedback.</li>
+            <li>Earned rewards and governance tokens by meeting strict uptime and performance requirements.</li>
+            <li>Strengthened understanding of blockchain security, consensus, and operational risks.</li>
+          </ul>
+
+          <h3>Surveillance Robot using Wi-Fi Module</h3>
+          <p>
+            Built a Wi-Fi controlled surveillance robot using an ESP8266 module, motor
+            drivers, and sensors for remote monitoring and navigation.
+          </p>
+          <ul>
+            <li>Combined IoT, robotics, and wireless communication.</li>
+            <li>Reinforced awareness of attack surfaces in connected devices.</li>
+          </ul>
+
+          <h3>Line Follower Robot</h3>
+          <p>
+            Designed an autonomous line follower using IR sensors and basic control algorithms,
+            highlighting my foundation in embedded systems and control loops.
+          </p>
+        `,
+      },
+      skills: {
+        title: "SKILLS FIREWALL // CAPABILITIES",
+        html: `
+          <h3>Cybersecurity & Security Mindset</h3>
+          <ul>
+            <li>Cybersecurity fundamentals and threat modeling mindset.</li>
+            <li>Phishing detection and awareness of social engineering techniques.</li>
+            <li>Basic network security concepts (ports, protocols, firewalls, exposure).</li>
+            <li>Linux security awareness: services, permissions, log inspection.</li>
+            <li>Blockchain infrastructure security and node hardening.</li>
+          </ul>
+
+          <h3>Blockchain & Infrastructure</h3>
+          <ul>
+            <li>Node deployment & maintenance (Aztec, Nillion, Boundless, Pipe, Gensyn).</li>
+            <li>Validator operations and testnet participation.</li>
+            <li>Reverse engineering common infrastructure failures and misconfigurations.</li>
+          </ul>
+
+          <h3>DevOps & Tools</h3>
+          <ul>
+            <li>Docker, Docker Compose, systemd, tmux, Nginx, Git.</li>
+            <li>Linux server administration (Ubuntu, Debian).</li>
+            <li>Monitoring basics and log-based troubleshooting.</li>
+          </ul>
+
+          <h3>Cloud Platforms</h3>
+          <ul>
+            <li>Google Cloud Platform (GCP).</li>
+            <li>Amazon Web Services (AWS).</li>
+            <li>Deploying and maintaining services on cloud/VPS infrastructure.</li>
+          </ul>
+
+          <h3>Engineering & Mechatronics</h3>
+          <ul>
+            <li>Robotics basics, sensors & actuators.</li>
+            <li>Control systems integration.</li>
+            <li>Hardware–software co-design thinking.</li>
+          </ul>
+        `,
+      },
+      certs: {
+        title: "CERTIFICATION VAULT // VALIDATION",
+        html: `
+          <h3>Key Certificates</h3>
+          <ul>
+            <li><strong>Multicon W 2025 – TCET</strong> (Technical Conference).</li>
+            <li><strong>Wi-Fi Hacking & Cybersecurity Basics</strong> – Self-study / Online course.</li>
+          </ul>
+          <p>
+            Additional certificates and badges are available in my public folder:
+          </p>
+          <p>
+            <a href="https://drive.google.com/drive/folders/1hfliYwD9h-J8NXAxCcJA9Jt-Vu6Y8BM3" target="_blank">
+              View Full Certificate Repository
+            </a>
+          </p>
+          <p>
+            These reflect my independent learning path from Mechatronics into Cybersecurity,
+            with a focus on networking, ethical hacking fundamentals, and practical security skills.
+          </p>
+        `,
+      },
+      experience: {
+        title: "EXPERIENCE SERVER ROOM // HANDS-ON WORK",
+        html: `
+          <h3>Blockchain Node Operator – Independent Contributor</h3>
+          <p><strong>2019 – Present | Remote</strong></p>
+          <ul>
+            <li>Ran and maintained validator nodes for multiple decentralized networks.</li>
+            <li>Deployed and optimized blockchain infrastructure on cloud/VPS platforms (AWS, GCP, Hetzner).</li>
+            <li>Applied secure configuration practices while balancing performance and reliability.</li>
+            <li>Engaged in community-driven testnets and contributed protocol-level feedback.</li>
+            <li>Developed a deep understanding of how infrastructure misconfigurations can impact security and availability.</li>
+          </ul>
+          <p>
+            This experience forms a strong foundation for specializing in
+            <strong>cloud security, infrastructure security, and blockchain security</strong> in my future studies.
+          </p>
+        `,
+      },
+      education: {
+        title: "EDUCATION DATABASE // ACADEMIC PATH",
+        html: `
+          <h3>Bachelor’s in Mechanical & Mechatronics Engineering</h3>
+          <p>
+            Thakur College of Engineering and Technology (TCET) | 2021 – 2025
+          </p>
+          <p>
+            My degree focused on robotics, control systems, and hardware–software integration,
+            providing a strong engineering foundation.
+          </p>
+          <ul>
+            <li>Capstone and mini-projects in robotics and IoT.</li>
+            <li>Hands-on exposure to sensors, actuators, microcontrollers, and embedded systems.</li>
+          </ul>
+
+          <h3>Transition to Cybersecurity</h3>
+          <p>
+            While my formal degree is in Mechatronics, my self-directed learning, node
+            operations experience, and projects such as InfiniteTraceX reflect a clear
+            shift towards <strong>Cybersecurity and Security Engineering</strong>.
+          </p>
+          <p>
+            My goal is to pursue a <strong>Master’s in Cybersecurity</strong>, where I can
+            combine my infrastructure experience with structured training in areas such as:
+          </p>
+          <ul>
+            <li>Network and application security.</li>
+            <li>Cloud and infrastructure security.</li>
+            <li>Incident response and threat detection.</li>
+            <li>Security in blockchain and distributed systems.</li>
+          </ul>
+        `,
+      },
+      resume: {
+        title: "RESUME TERMINAL // DOCUMENT ACCESS",
+        html: `
+          <h3>Cybersecurity-Focused Resume</h3>
+          <p>
+            A detailed, up-to-date resume emphasizing my transition to cybersecurity,
+            hands-on node operations, and technical skills is available here:
+          </p>
+          <p>
+            <a href="https://drive.google.com/file/d/1nIzg5jFt1ri5Nsv--qqui41NUwnGuyHQ/view?usp=drive_link" target="_blank">
+              Open Cybersecurity Resume (Google Drive)
+            </a>
+          </p>
+          <p>
+            You can also cross-reference this terminal view with live projects such as
+            <a href="https://infinitetracex.netlify.app/" target="_blank">InfiniteTraceX</a>
+            and my GitHub profile at
+            <a href="https://github.com/Proanant1" target="_blank">github.com/Proanant1</a>.
+          </p>
+          <p>
+            This simulated environment is specifically designed to demonstrate my
+            <strong>motivation and creativity</strong> for a Master’s in Cybersecurity.
+          </p>
+        `,
+      },
+    };
+
+    const terminalBody = document.getElementById("terminalBody");
+    const buildings = Array.from(document.querySelectorAll(".building"));
+    const agentEl = document.getElementById("agent");
+    const cityEl = document.getElementById("city");
+
+    let agent = { x: 60, y: 140, speed: 10 }; // starting position
+    let activeZone = "command";
+
+    function setTerminal(zoneKey) {
+      const zone = ZONES[zoneKey];
+      if (!zone) return;
+      activeZone = zoneKey;
+
+      buildings.forEach((b) =>
+        b.classList.toggle("active", b.dataset.zone === zoneKey)
+      );
+
+      terminalBody.innerHTML = `
+        <div class="scan-line"></div>
+        <h2>${zone.title}</h2>
+        ${zone.html}
+      `;
+    }
+
+    function updateAgentPosition() {
+      agentEl.style.left = agent.x + "px";
+      agentEl.style.top = agent.y + "px";
+      detectOverlap();
+    }
+
+    function getRect(el) {
+      const r = el.getBoundingClientRect();
+      const parent = cityEl.getBoundingClientRect();
+      return {
+        left: r.left - parent.left,
+        top: r.top - parent.top,
+        right: r.right - parent.left,
+        bottom: r.bottom - parent.top,
+      };
+    }
+
+    function detectOverlap() {
+      const agentRect = {
+        left: agent.x,
+        top: agent.y,
+        right: agent.x + 20,
+        bottom: agent.y + 28,
+      };
+      let overlapped = null;
+
+      buildings.forEach((b) => {
+        const r = getRect(b);
+        const isOverlap = !(
+          agentRect.right < r.left ||
+          agentRect.left > r.right ||
+          agentRect.bottom < r.top ||
+          agentRect.top > r.bottom
+        );
+        if (isOverlap) overlapped = b;
+      });
+
+      if (overlapped) {
+        overlapped.classList.add("active");
+        activeZone = overlapped.dataset.zone;
+      } else {
+        buildings.forEach((b) => {
+          if (b.dataset.zone !== activeZone) b.classList.remove("active");
+        });
+      }
+    }
+
+    function clampAgent() {
+      const cityRect = cityEl.getBoundingClientRect();
+      const maxX = cityRect.width - 24;
+      const maxY = cityRect.height - 32;
+      agent.x = Math.max(6, Math.min(maxX, agent.x));
+      agent.y = Math.max(6, Math.min(maxY, agent.y));
+    }
+
+    // Keyboard controls
+    window.addEventListener("keydown", (e) => {
+      if (document.getElementById("loginOverlay")) return; // locked until login
+
+      let moved = false;
+      if (["w", "ArrowUp"].includes(e.key)) {
+        agent.y -= agent.speed;
+        moved = true;
+      } else if (["s", "ArrowDown"].includes(e.key)) {
+        agent.y += agent.speed;
+        moved = true;
+      } else if (["a", "ArrowLeft"].includes(e.key)) {
+        agent.x -= agent.speed;
+        moved = true;
+      } else if (["d", "ArrowRight"].includes(e.key)) {
+        agent.x += agent.speed;
+        moved = true;
+      } else if (e.key === "e" || e.key === "Enter") {
+        setTerminal(activeZone);
+      } else if (e.key === "Tab") {
+        e.preventDefault();
+        // cycle zones
+        const keys = Object.keys(ZONES);
+        const idx = keys.indexOf(activeZone);
+        const next = keys[(idx + 1) % keys.length];
+        setTerminal(next);
+      }
+
+      if (moved) {
+        clampAgent();
+        updateAgentPosition();
+      }
+    });
+
+    // Click buildings to open
+    buildings.forEach((b) => {
+      b.addEventListener("click", () => {
+        activeZone = b.dataset.zone;
+        setTerminal(activeZone);
+
+        // Move agent near building center
+        const r = getRect(b);
+        agent.x = (r.left + r.right) / 2 - 10;
+        agent.y = r.bottom - 34;
+        clampAgent();
+        updateAgentPosition();
+      });
+    });
+
+    // Initialize
+    setTerminal("command");
+    updateAgentPosition();
+
+    // Login overlay logic
+    const loginOverlay = document.getElementById("loginOverlay");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginInput = document.getElementById("loginInput");
+
+    function closeLogin() {
+      loginOverlay.style.opacity = "0";
+      loginOverlay.style.transition = "opacity 0.35s ease-out";
+      setTimeout(() => {
+        loginOverlay.remove();
+      }, 350);
+    }
+
+    loginBtn.addEventListener("click", closeLogin);
+    loginInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") closeLogin();
+    });
+  </script>
+</body>
+</html>
