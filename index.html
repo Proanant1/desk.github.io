@@ -1,33 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Defense Zone - ANANT PANDEY Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+</head>
 <body>
 
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-panel">
-    <h2>ACCESS GATEWAY</h2>
-    <p>Entering Secure Zone: Anant Pandey</p>
-    <input id="loginInput" value="ANANT_SECURE"/>
-    <button id="loginBtn">INITIATE SESSION</button>
-  </div>
-</div>
+    <div id="login-screen" class="screen active">
+        <canvas id="code-rain-canvas"></canvas>
+        <div class="login-console">
+            <pre id="login-text" class="neon-green"></pre>
+            <div class="input-line">
+                <span class="prompt neon-green">></span>
+                <input type="text" id="login-input" class="neon-green" value="login --guest" readonly>
+                <span class="cursor">_</span>
+            </div>
+            <button id="enter-button" class="neon-button">ACCESS ZONE</button>
+        </div>
+        <div class="tagline neon-green">"Entering Secure Zone: Anant Pandey – Cybersecurity Portfolio"</div>
+    </div>
 
-<div class="main-wrapper">
+    <div id="city-map-screen" class="screen">
+        <div class="hud top-left neon-green">
+            <div class="hud-item">AGENT ID: PROANANT1</div>
+            <div class="hud-item">STATUS: SECURE</div>
+        </div>
+        <div class="hud bottom-right neon-green">
+            <div class="hud-item">LOCATION: CYBER CITY GRID</div>
+            <div class="hud-item" id="audio-toggle">🔊 SOUNDS: ON</div>
+        </div>
 
-  <div class="city" id="city">
-    <div class="building" data-zone="command" style="left:10%;top:10%;">CYBER COMMAND</div>
-    <div class="building" data-zone="threats" style="left:60%;top:15%;">THREAT LAB</div>
-    <div class="building" data-zone="skills" style="left:15%;top:50%;">SKILLS FIREWALL</div>
-    <div class="building" data-zone="certs" style="left:60%;top:50%;">CERT VAULT</div>
-    <div class="building" data-zone="experience" style="left:10%;top:80%;">SERVER ROOM</div>
-    <div class="building" data-zone="resume" style="left:45%;top:70%;">RESUME TERMINAL</div>
+        <h1 class="city-title neon-green">DIGITAL DEFENSE ZONE</h1>
 
-    <div id="agent" class="agent"></div>
-  </div>
+        <div class="city-container">
+            <div class="building cyber-command" data-section="about">
+                <div class="building-label">1. CYBER COMMAND CENTER (About Me)</div>
+            </div>
 
-  <div class="terminal" id="terminal">
-    <h2>WELCOME TO SECURE ZONE</h2>
-    <p>Move using W A S D and click a building to access data.</p>
-  </div>
+            <div class="building threat-lab" data-section="projects">
+                <div class="building-label">2. THREAT ANALYSIS LAB (Projects)</div>
+            </div>
 
-</div>
+            <div class="building skills-firewall" data-section="skills">
+                <div class="building-label">3. SKILLS FIREWALL</div>
+            </div>
 
-<script src="script.js"></script>
+            <div class="building cert-vault" data-section="certs">
+                <div class="building-label">4. CERTIFICATION VAULT</div>
+            </div>
+
+            <div class="building server-room" data-section="experience">
+                <div class="building-label">5. EXPERIENCE SERVER ROOM</div>
+            </div>
+
+            <div class="building education-db" data-section="education">
+                <div class="building-label">6. EDUCATION DATABASE</div>
+            </div>
+
+            <div class="building resume-terminal" data-section="resume">
+                <div class="building-label">RESUME TERMINAL</div>
+            </div>
+        </div>
+        
+        <div id="terminal-modal" class="terminal-modal">
+            <div class="terminal-content">
+                <div class="terminal-header">
+                    ACCESSING DATA NODE: <span id="node-name"></span>
+                    <button class="close-button" onclick="closeTerminal()">[ X ] EXIT</button>
+                </div>
+                <pre id="terminal-output" class="neon-green"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
+</html>
